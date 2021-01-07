@@ -1,0 +1,6 @@
+migrations
+.idea
+__pycache__
+.env
+Pipfile
+Pipfile.lock
