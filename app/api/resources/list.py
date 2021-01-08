@@ -1,5 +1,6 @@
 from flask import request
 from flask_restful import Resource
+from flask_jwt_extended import jwt_required, fresh_jwt_required
 from marshmallow import ValidationError
 
 from ..schema.list import ListSchema
@@ -10,6 +11,7 @@ lists_schema = ListSchema(many=True)
 
 
 class ListCreate(Resource):
+    @fresh_jwt_required
     def post(self):
         try:
             list_ = list_schema.load(request.get_json())
@@ -25,12 +27,14 @@ class ListCreate(Resource):
 
 
 class List(Resource):
+    @jwt_required
     def get(self, list_id):
         list_ = ListModel.find_by_id(list_id)
         if list_:
             return list_schema.dump(list_), 200
         return {"message": "List not found"}, 404
 
+    @fresh_jwt_required
     def delete(self, list_id):
         list_ = ListModel.find_by_id(list_id)
         if list_:
@@ -51,11 +55,13 @@ class List(Resource):
 
 
 class UserLists(Resource):
+    @jwt_required
     def get(self, user_id):
         lists = ListModel.query.filter_by(user_id=user_id)
         return {"lists": lists_schema.dump(lists)}, 200
 
 
 class Lists(Resource):
+    @jwt_required
     def get(self):
         return {"lists": lists_schema.dump(ListModel.find_all())}, 200

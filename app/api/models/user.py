@@ -37,4 +37,4 @@ class UserModel(db.Model):
 
     @staticmethod
     def verify_hash(hash_pwd, password):
-        bcrypt.check_password_hash(hash_pwd, password)
+        return bcrypt.check_password_hash(hash_pwd, password)
