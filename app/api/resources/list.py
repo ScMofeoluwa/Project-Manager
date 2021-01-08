@@ -42,6 +42,7 @@ class List(Resource):
             return {"message": "List deleted"}, 200
         return {"message": "List not found"}, 404
 
+    @fresh_jwt_required
     def patch(self, list_id):
         list_json = request.get_json()
         list_ = ListModel.find_by_id(list_id)

@@ -1,6 +1,6 @@
 from flask_restful import Api
 
-from .user import User, UserRegister, Users, UserLogin, TokenRefresh
+from .user import User, UserRegister, Users, UserLogin, TokenRefresh, UserLogout
 from .list import List, Lists, ListCreate, UserLists
 from .task import Task, Tasks, TaskCreate
 
@@ -11,6 +11,7 @@ api.add_resource(User, "/api/users/<int:user_id>")
 api.add_resource(Users, "/api/users")
 api.add_resource(UserLogin, "/api/auth")
 api.add_resource(TokenRefresh, "/api/refresh")
+api.add_resource(UserLogout, "/api/logout")
 
 
 api.add_resource(List, "/api/lists/<int:list_id>")
