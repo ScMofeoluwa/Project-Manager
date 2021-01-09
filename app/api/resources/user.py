@@ -4,7 +4,7 @@ from flask_restful import Resource
 from flask_jwt_extended import (
     create_access_token, create_refresh_token,
     jwt_refresh_token_required, get_jwt_identity,
-    jwt_required, get_raw_jwt
+    jwt_required, get_raw_jwt, fresh_jwt_required
 )
 from marshmallow import ValidationError
 
@@ -32,12 +32,14 @@ class UserRegister(Resource):
 
 
 class User(Resource):
+    @jwt_required
     def get(self, user_id):
         user = UserModel.find_by_id(user_id)
         if user:
             return user_schema.dump(user), 200
         return {"message": "User not found"}, 404
 
+    @fresh_jwt_required
     def delete(self, user_id):
         user = UserModel.find_by_id(user_id)
         if not user:
@@ -50,13 +52,12 @@ class UserLogin(Resource):
     def post(self):
         try:
             user_json = request.get_json()
-            user_data = user_schema.load(user_json)
         except ValidationError as err:
             return err.messages, 400
 
-        user = UserModel.find_by_email(user_data.email)
+        user = UserModel.find_by_email(user_json["email"])
 
-        if user and user.verify_hash(user.password, user_data.password):
+        if user and user.verify_hash(user.password, user_json["password"]):
             access_token = create_access_token(identity=user.id, fresh=True)
             refresh_token = create_refresh_token(user.id)
             return {"access_token": access_token, "refresh_token": refresh_token}, 200
@@ -65,6 +66,7 @@ class UserLogin(Resource):
 
 
 class Users(Resource):
+    @jwt_required
     def get(self):
         return {"users": users_schema.dump(UserModel.find_all())}, 200
 
