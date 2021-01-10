@@ -1,6 +1,6 @@
-from ... import ma
-from ..models.user import UserModel
-from ..schema.list import ListSchema
+from app import ma
+from .model import UserModel
+from ..lists.schema import ListSchema
 
 
 class UserSchema(ma.SQLAlchemyAutoSchema):

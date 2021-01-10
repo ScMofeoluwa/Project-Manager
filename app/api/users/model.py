@@ -1,4 +1,4 @@
-from ... import db, bcrypt
+from app import db, bcrypt
 
 
 class UserModel(db.Model):

@@ -1,4 +1,5 @@
 from flask import request
+from datetime import timedelta
 from blacklist import BLACKLIST
 from flask_restful import Resource
 from flask_jwt_extended import (
@@ -8,8 +9,8 @@ from flask_jwt_extended import (
 )
 from marshmallow import ValidationError
 
-from ..models.user import UserModel
-from ..schema.user import UserSchema
+from .model import UserModel
+from .schema import UserSchema
 
 user_schema = UserSchema()
 users_schema = UserSchema(many=True)
@@ -60,8 +61,8 @@ class UserLogin(Resource):
         user = UserModel.find_by_email(user_json["email"])
 
         if user and user.verify_hash(user.password, user_json["password"]):
-            access_token = create_access_token(identity=user.id, fresh=True)
-            refresh_token = create_refresh_token(user.id)
+            access_token = create_access_token(identity=user.id, fresh=True, expires_delta=timedelta(hours=2))
+            refresh_token = create_refresh_token(user.id, expires_delta=False)
             return {"access_token": access_token, "refresh_token": refresh_token}, 200
 
         return {"message": "Invalid credentials!"}, 401
@@ -79,5 +80,5 @@ class TokenRefresh(Resource):
     @jwt_refresh_token_required
     def post(self):
         current_user = get_jwt_identity()
-        new_token = create_access_token(identity=current_user, fresh=False)
+        new_token = create_access_token(identity=current_user, fresh=False, expires_delta=timedelta(hours=2))
         return {"access_token": new_token}, 200

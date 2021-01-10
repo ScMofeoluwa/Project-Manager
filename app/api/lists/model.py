@@ -1,5 +1,5 @@
 from typing import List
-from ... import db
+from app import db
 
 
 class ListModel(db.Model):

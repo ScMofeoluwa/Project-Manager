@@ -3,9 +3,9 @@ from flask_restful import Resource
 from flask_jwt_extended import fresh_jwt_required, get_jwt_identity, jwt_required
 from marshmallow import ValidationError
 
-from ..schema.task import TaskSchema
-from ..models.task import TaskModel
-from ..models.list import ListModel
+from .schema import TaskSchema
+from .model import TaskModel
+from ..lists.model import ListModel
 
 task_schema = TaskSchema()
 tasks_schema = TaskSchema(many=True)
@@ -14,6 +14,12 @@ tasks_schema = TaskSchema(many=True)
 class TaskCreate(Resource):
     @fresh_jwt_required
     def post(self, list_id):
+        current_user = get_jwt_identity()
+        list_ = ListModel.find_by_id(list_id)
+
+        if list_.user_id != current_user:
+            return {"message": "List not found"}
+
         try:
             task = task_schema.load(request.get_json())
         except ValidationError as err:

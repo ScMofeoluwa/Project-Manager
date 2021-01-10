@@ -3,8 +3,8 @@ from flask_restful import Resource
 from flask_jwt_extended import jwt_required, fresh_jwt_required, get_jwt_identity
 from marshmallow import ValidationError
 
-from ..schema.list import ListSchema
-from ..models.list import ListModel
+from .schema import ListSchema
+from .model import ListModel
 
 list_schema = ListSchema()
 lists_schema = ListSchema(many=True)

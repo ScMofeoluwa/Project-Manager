@@ -1,6 +1,6 @@
-from ... import ma
-from ..models.list import ListModel
-from ..schema.task import TaskSchema
+from app import ma
+from .model import ListModel
+from ..tasks.schema import TaskSchema
 
 
 class ListSchema(ma.SQLAlchemyAutoSchema):

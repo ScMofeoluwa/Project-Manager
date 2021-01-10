@@ -1,5 +1,5 @@
-from ... import ma
-from ..models.task import TaskModel
+from app import ma
+from app.api.tasks.model import TaskModel
 
 
 class TaskSchema(ma.SQLAlchemyAutoSchema):
