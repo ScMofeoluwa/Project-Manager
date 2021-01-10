@@ -12,9 +12,9 @@ class Config(object):
     FLASK_APP = environ.get("FLASK_APP")
     FLASK_ENV = environ.get("FLASK_ENV")
     SECRET_KEY = environ.get("SECRET_KEY")
-    JWT_BLACKLIST_TOKEN_CHECKS = environ.get("JWT_BLACKLIST_TOKEN_CHECKS").split(",")
+    JWT_BLACKLIST_TOKEN_CHECKS = ["access", "refresh"]
     JWT_BLACKLIST_ENABLED = True
-    SQLALCHEMY_DATABASE_URI = environ.get("SQLALCHEMY_DATABASE_URI")
+    SQLALCHEMY_DATABASE_URI = environ.get("DATABASE_URL", "SQLALCHEMY_DATABASE_URI")
     PROPAGATE_EXCEPTIONS = True
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
