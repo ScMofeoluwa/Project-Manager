@@ -33,15 +33,17 @@ class UserRegister(Resource):
 
 class User(Resource):
     @jwt_required
-    def get(self, user_id):
-        user = UserModel.find_by_id(user_id)
+    def get(self):
+        current_user = get_jwt_identity()
+        user = UserModel.find_by_id(current_user)
         if user:
             return user_schema.dump(user), 200
         return {"message": "User not found"}, 404
 
     @fresh_jwt_required
-    def delete(self, user_id):
-        user = UserModel.find_by_id(user_id)
+    def delete(self):
+        current_user = get_jwt_identity()
+        user = UserModel.find_by_id(current_user)
         if not user:
             return {"message": "User not found"}, 404
         user.delete_from_db()
@@ -63,12 +65,6 @@ class UserLogin(Resource):
             return {"access_token": access_token, "refresh_token": refresh_token}, 200
 
         return {"message": "Invalid credentials!"}, 401
-
-
-class Users(Resource):
-    @jwt_required
-    def get(self):
-        return {"users": users_schema.dump(UserModel.find_all())}, 200
 
 
 class UserLogout(Resource):

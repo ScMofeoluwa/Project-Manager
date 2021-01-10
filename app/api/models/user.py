@@ -1,5 +1,4 @@
 from ... import db, bcrypt
-from typing import List
 
 
 class UserModel(db.Model):
@@ -26,10 +25,6 @@ class UserModel(db.Model):
     @classmethod
     def find_by_email(cls, email):
         return cls.query.filter_by(email=email).first()
-
-    @classmethod
-    def find_all(cls) -> List["UserModel"]:
-        return cls.query.all()
 
     @staticmethod
     def generate_hash(password):

@@ -1,4 +1,3 @@
-from typing import List
 from ... import db
 
 
@@ -20,7 +19,3 @@ class TaskModel(db.Model):
     @classmethod
     def find_by_id(cls, _id):
         return cls.query.filter_by(id=_id).first()
-
-    @classmethod
-    def find_all(cls) -> List["TaskModel"]:
-        return cls.query.all()

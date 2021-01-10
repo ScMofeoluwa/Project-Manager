@@ -23,5 +23,5 @@ class ListModel(db.Model):
         return cls.query.filter_by(id=_id).first()
 
     @classmethod
-    def find_all(cls) -> List["ListModel"]:
-        return cls.query.all()
+    def find_all(cls, user_id) -> List["ListModel"]:
+        return cls.query.filter_by(user_id=user_id)

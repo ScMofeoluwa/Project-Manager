@@ -1,25 +1,25 @@
 from flask_restful import Api
+from flask import Blueprint
 
-from .user import User, UserRegister, Users, UserLogin, TokenRefresh, UserLogout
-from .list import List, Lists, ListCreate, UserLists
-from .task import Task, Tasks, TaskCreate
+from .user import User, UserRegister, UserLogin, TokenRefresh, UserLogout
+from .list import List, Lists, ListCreate
+from .task import Task, TaskCreate
 
-api = Api()
-
-api.add_resource(UserRegister, "/api/register/user")
-api.add_resource(User, "/api/users/<int:user_id>")
-api.add_resource(Users, "/api/users")
-api.add_resource(UserLogin, "/api/auth")
-api.add_resource(TokenRefresh, "/api/refresh")
-api.add_resource(UserLogout, "/api/logout")
+api_bp = Blueprint("api", __name__)
+api = Api(api_bp, prefix="/api/v1")
 
 
-api.add_resource(List, "/api/lists/<int:list_id>")
-api.add_resource(Lists, "/api/lists")
-api.add_resource(ListCreate, "/api/lists/create")
-api.add_resource(UserLists, "/api/users/<int:user_id>/lists")
+api.add_resource(UserRegister, "/register")
+api.add_resource(User, "/user")
+api.add_resource(UserLogin, "/login")
+api.add_resource(UserLogout, "/logout")
+api.add_resource(TokenRefresh, "/refresh")
 
 
-api.add_resource(Task, "/api/tasks/<int:task_id>")
-api.add_resource(Tasks, "/api/tasks")
-api.add_resource(TaskCreate, "/api/tasks/create")
+api.add_resource(List, "/lists/<int:list_id>")
+api.add_resource(Lists, "/lists")
+api.add_resource(ListCreate, "/lists/create")
+
+
+api.add_resource(Task, "/<int:list_id>/tasks/<int:task_id>")
+api.add_resource(TaskCreate, "/<int:list_id>/tasks/create")

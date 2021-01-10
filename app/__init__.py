@@ -30,7 +30,7 @@ def create_app(config_class=Config):
     migrate.init_app(app, db)
 
     with app.app_context():
-        from .api.resources import api
-        api.init_app(app)
+        from .api.resources import api_bp
+        app.register_blueprint(api_bp)
 
         return app
